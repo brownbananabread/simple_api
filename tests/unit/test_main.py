@@ -1,5 +1,5 @@
 from simple_api import flask
-from simple_api.utils.metadata import NAME
+from simple_api.utils import metadata
 
 
 def test_create_app():
@@ -17,7 +17,7 @@ def test_health_endpoint():
     response = client.get("/health")
 
     assert response.status_code == 200
-    assert response.json == {"status": "healthy", "service": NAME}
+    assert response.json == {"status": "healthy", "service": metadata.NAME}
 
 
 def test_health_endpoint_wrong_method():

@@ -2,7 +2,7 @@ import logging
 import sys
 
 
-def setup_logger(level="INFO"):
+def setup(level="INFO"):
     if isinstance(level, str):
         level = getattr(logging, level.upper())
 
@@ -23,3 +23,8 @@ def setup_logger(level="INFO"):
     logger.propagate = False
 
     return logger
+
+
+def get_logger(name: str):
+    """Get a logger with the given name under the simple_api namespace."""
+    return logging.getLogger(f"simple_api.{name}")

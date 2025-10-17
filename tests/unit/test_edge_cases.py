@@ -49,7 +49,7 @@ class TestEdgeCases:
     def test_create_note_with_special_characters(self, client):
         """Test creating notes with special characters."""
         special_chars = [
-            {"title": "Title with \"quotes\"", "content": "Content with 'quotes'"},
+            {"title": 'Title with "quotes"', "content": "Content with 'quotes'"},
             {"title": "Backslash \\ test", "content": "Forward / slash"},
             {"title": "Newline\ntest", "content": "Tab\ttest"},
             {"title": "Symbols: @#$%^&*()", "content": "More symbols: []{}|<>"},

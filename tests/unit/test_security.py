@@ -89,10 +89,7 @@ class TestSecurityHeaders:
 
             # If CORS is enabled, check other CORS headers
             if response.status_code == 200:
-                assert (
-                    "Access-Control-Allow-Methods" in headers
-                    or "Access-Control-Allow-Headers" in headers
-                )
+                assert "Access-Control-Allow-Methods" in headers or "Access-Control-Allow-Headers" in headers
 
     def test_content_type_header_json_responses(self, client):
         """Test that JSON responses have correct content type."""

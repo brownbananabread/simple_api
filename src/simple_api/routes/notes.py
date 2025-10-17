@@ -4,6 +4,7 @@ from simple_api.schemas import NoteCreateRequest, NoteUpdateRequest
 from simple_api.service import NoteService
 from simple_api.utils import validators
 
+
 def register_handlers(app: Flask, note_service: NoteService) -> None:
     """Register health check endpoints."""
 
@@ -77,9 +78,7 @@ def register_handlers(app: Flask, note_service: NoteService) -> None:
         # Validate using Pydantic schema
         validated_data = NoteCreateRequest(**data)
 
-        note = note_service.create_note(
-            title=validated_data.title, content=validated_data.content
-        )
+        note = note_service.create_note(title=validated_data.title, content=validated_data.content)
         return jsonify(note.to_dict()), 201
 
     @app.route("/api/v1/notes", methods=["GET"])
@@ -111,7 +110,7 @@ def register_handlers(app: Flask, note_service: NoteService) -> None:
         """
         notes = note_service.get_all_notes()
         return jsonify([note.to_dict() for note in notes]), 200
-    
+
     @app.route("/api/v1/notes/<note_id>", methods=["GET"])
     def get_note(note_id: str):
         """Get a specific note.

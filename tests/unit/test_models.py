@@ -1,6 +1,7 @@
 """Tests for the data models."""
 
 from datetime import datetime
+
 from simple_api.models import Note
 
 

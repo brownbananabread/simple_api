@@ -4,8 +4,8 @@ import json
 
 import pytest
 
-from simple_api.utils import errors, validators
 from simple_api.flask import create_app
+from simple_api.utils import errors, validators
 
 
 @pytest.fixture
@@ -53,9 +53,7 @@ class TestRequestValidation:
         """Test that empty title is rejected."""
         payload = {"title": "", "content": "Test content"}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -66,9 +64,7 @@ class TestRequestValidation:
         """Test that whitespace-only title is rejected."""
         payload = {"title": "   ", "content": "Test content"}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -78,9 +74,7 @@ class TestRequestValidation:
         """Test that empty content is rejected."""
         payload = {"title": "Test Title", "content": ""}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -90,9 +84,7 @@ class TestRequestValidation:
         """Test that whitespace-only content is rejected."""
         payload = {"title": "Test Title", "content": "   "}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -102,9 +94,7 @@ class TestRequestValidation:
         """Test that title exceeding max length is rejected."""
         payload = {"title": "a" * 201, "content": "Test content"}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -114,9 +104,7 @@ class TestRequestValidation:
         """Test that content exceeding max length is rejected."""
         payload = {"title": "Test Title", "content": "a" * 10001}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -126,9 +114,7 @@ class TestRequestValidation:
         """Test that leading/trailing whitespace is trimmed."""
         payload = {"title": "  Test Title  ", "content": "  Test content  "}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         assert response.status_code == 201
         data = response.get_json()
@@ -222,9 +208,7 @@ class TestMaxContentLength:
         large_content = "x" * (2 * 1024 * 1024)  # 2MB
         payload = {"title": "Test", "content": large_content}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         # Flask returns 413 for payload too large
         assert response.status_code == 413

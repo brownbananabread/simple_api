@@ -1,30 +1,10 @@
-import logging
-import sys
+"""
+Logger utilities for the Simple API application.
 
+This module provides backwards compatibility by re-exporting from the middleware package.
+The logger functionality has been moved to simple_api.middleware.logger.
+"""
 
-def setup(level="INFO"):
-    if isinstance(level, str):
-        level = getattr(logging, level.upper())
+from simple_api.middleware.logger import get_logger, setup
 
-    logger = logging.getLogger("simple_api")
-    logger.setLevel(level)
-
-    # Only add handlers if none exist
-    if not logger.handlers:
-        handler = logging.StreamHandler(sys.stderr)
-        handler.setLevel(level)
-        formatter = logging.Formatter(
-            "%(asctime)s - [%(levelname)s] - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
-        )
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-
-    # Don't propagate to root logger to avoid duplicate logs
-    logger.propagate = False
-
-    return logger
-
-
-def get_logger(name: str):
-    """Get a logger with the given name under the simple_api namespace."""
-    return logging.getLogger(f"simple_api.{name}")
+__all__ = ["setup", "get_logger"]

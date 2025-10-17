@@ -4,7 +4,7 @@ PYTHON_VERSION = $(shell grep "^python = \"" pyproject.toml | sed 's/^python = "
 
 export SERVER_HOST ?= 0.0.0.0
 export SERVER_PORT ?= 3000
-export LOG_LEVEL ?= DEBUG
+export LOG_LEVEL ?= INFO
 export AUTO_SAVE ?= true
 ENVIRONMENT ?= development
 
@@ -39,9 +39,6 @@ test:
 test-cov:
 	poetry run pytest --cov=src/simple_api --cov-report=term-missing --cov-report=html
 
-coverage:
-	poetry run pytest --cov=src/simple_api --cov-report=term-missing --cov-report=html --cov-fail-under=80
-
 lint:
 	poetry run black .
 	poetry run isort .
@@ -51,8 +48,6 @@ lint:
 
 imports:
 	poetry run deptry .
-
-check: lint test imports
 
 commit:
 	git add . && poetry run cz commit && git push

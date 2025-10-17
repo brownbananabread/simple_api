@@ -107,9 +107,7 @@ def create_test_note(client):
     """
     created_notes = []
 
-    def _create_note(
-        title: str = "Test Note", content: str = "Test content", completed: bool = False
-    ):
+    def _create_note(title: str = "Test Note", content: str = "Test content", completed: bool = False):
         import json
 
         payload = {"title": title, "content": content}

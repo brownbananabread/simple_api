@@ -1,4 +1,5 @@
 import os
+
 from flask import Flask, jsonify
 
 from simple_api.utils import logger, metadata
@@ -6,6 +7,7 @@ from simple_api.utils import logger, metadata
 LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO").upper()
 
 LOG = logger.setup(level=LOG_LEVEL)
+
 
 def register_handlers(app: Flask) -> None:
     """Register health check endpoints."""

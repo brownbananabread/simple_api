@@ -27,7 +27,10 @@ class TestCompleteAPIWorkflow:
     def test_full_note_lifecycle(self, client):
         """Test complete note lifecycle: create -> read -> update -> delete."""
         # Create a note
-        create_payload = {"title": "Integration Test Note", "content": "Original content"}
+        create_payload = {
+            "title": "Integration Test Note",
+            "content": "Original content",
+        }
         create_response = client.post(
             "/api/v1/notes",
             data=json.dumps(create_payload),
@@ -219,9 +222,7 @@ class TestCompleteAPIWorkflow:
         # Verify created_at didn't change but updated_at did
         assert updated_note["created_at"] == original_created_at
         assert updated_note["updated_at"] != original_updated_at
-        assert datetime.fromisoformat(
-            updated_note["updated_at"]
-        ) > datetime.fromisoformat(original_updated_at)
+        assert datetime.fromisoformat(updated_note["updated_at"]) > datetime.fromisoformat(original_updated_at)
 
         # Cleanup
         client.delete(f"/api/v1/notes/{note_id}")

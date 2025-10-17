@@ -146,7 +146,7 @@ class TestNoteService:
         mock_repository.get.return_value = sample_note
         mock_repository.update.return_value = sample_note
 
-        result = service.update_note(sample_note.id, title="New Title")
+        service.update_note(sample_note.id, title="New Title")
 
         mock_repository.get.assert_called_once_with(sample_note.id)
         # Verify the note was updated with only the title changed
@@ -160,7 +160,7 @@ class TestNoteService:
         mock_repository.get.return_value = sample_note
         mock_repository.update.return_value = sample_note
 
-        result = service.update_note(sample_note.id, content="New Content")
+        service.update_note(sample_note.id, content="New Content")
 
         updated_note = mock_repository.update.call_args[0][1]
         assert updated_note.title == sample_note.title  # Unchanged
@@ -172,7 +172,7 @@ class TestNoteService:
         mock_repository.get.return_value = sample_note
         mock_repository.update.return_value = sample_note
 
-        result = service.update_note(sample_note.id, completed=True)
+        service.update_note(sample_note.id, completed=True)
 
         updated_note = mock_repository.update.call_args[0][1]
         assert updated_note.title == sample_note.title  # Unchanged
@@ -222,8 +222,8 @@ class TestNoteService:
         """Test that creating multiple notes generates unique IDs."""
         mock_repository.create.side_effect = lambda note: note
 
-        note1 = service.create_note("Note 1", "Content 1")
-        note2 = service.create_note("Note 2", "Content 2")
+        service.create_note("Note 1", "Content 1")
+        service.create_note("Note 2", "Content 2")
 
         # Extract the created notes from mock calls
         created_note1 = mock_repository.create.call_args_list[0][0][0]
@@ -268,9 +268,7 @@ class TestNoteServiceIntegration:
         assert retrieved == note
 
         # Update
-        updated = real_service.update_note(
-            note.id, title="Updated", content="Updated Content", completed=True
-        )
+        updated = real_service.update_note(note.id, title="Updated", content="Updated Content", completed=True)
         assert updated.title == "Updated"
         assert updated.content == "Updated Content"
         assert updated.completed is True

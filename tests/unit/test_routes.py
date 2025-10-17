@@ -63,9 +63,7 @@ class TestNotesRoutes:
         """Test creating a note successfully."""
         payload = {"title": "Test Note", "content": "Test content"}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         assert response.status_code == 201
         data = response.get_json()
@@ -80,9 +78,7 @@ class TestNotesRoutes:
         """Test creating a note without a title."""
         payload = {"content": "Test content"}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -93,9 +89,7 @@ class TestNotesRoutes:
         """Test creating a note without content."""
         payload = {"title": "Test Note"}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -106,9 +100,7 @@ class TestNotesRoutes:
         """Test creating a note without title and content."""
         payload = {}
 
-        response = client.post(
-            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data=json.dumps(payload), content_type="application/json")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -126,9 +118,7 @@ class TestNotesRoutes:
 
     def test_create_note_invalid_json(self, client):
         """Test creating a note with invalid JSON."""
-        response = client.post(
-            "/api/v1/notes", data="invalid json", content_type="application/json"
-        )
+        response = client.post("/api/v1/notes", data="invalid json", content_type="application/json")
 
         assert response.status_code == 400
 
@@ -187,6 +177,7 @@ class TestNotesRoutes:
         """Test getting a note that doesn't exist."""
         # Use a valid UUID that doesn't exist
         import uuid
+
         nonexistent_id = str(uuid.uuid4())
         response = client.get(f"/api/v1/notes/{nonexistent_id}")
 
@@ -299,6 +290,7 @@ class TestNotesRoutes:
         """Test updating a note that doesn't exist."""
         # Use a valid UUID that doesn't exist
         import uuid
+
         nonexistent_id = str(uuid.uuid4())
         update_payload = {"title": "Updated Title"}
         response = client.put(
@@ -323,7 +315,9 @@ class TestNotesRoutes:
 
         # Try to update with no data (empty object)
         response = client.put(
-            f"/api/v1/notes/{note_id}", data=json.dumps({}), content_type="application/json"
+            f"/api/v1/notes/{note_id}",
+            data=json.dumps({}),
+            content_type="application/json",
         )
 
         assert response.status_code == 400
@@ -374,6 +368,7 @@ class TestNotesRoutes:
         """Test deleting a note that doesn't exist."""
         # Use a valid UUID that doesn't exist
         import uuid
+
         nonexistent_id = str(uuid.uuid4())
         response = client.delete(f"/api/v1/notes/{nonexistent_id}")
 
@@ -474,7 +469,4 @@ class TestNotesRoutes:
         new_updated_at = update_response.get_json()["updated_at"]
 
         assert new_updated_at != original_updated_at
-        assert (
-            datetime.fromisoformat(new_updated_at)
-            > datetime.fromisoformat(original_updated_at)
-        )
+        assert datetime.fromisoformat(new_updated_at) > datetime.fromisoformat(original_updated_at)

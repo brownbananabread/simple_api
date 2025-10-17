@@ -8,4 +8,3 @@ class PayloadTooLargeError(ValueError):
     """Raised when the request payload is too large."""
 
     pass
-

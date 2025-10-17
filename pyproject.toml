@@ -52,6 +52,14 @@ skip_covered = false
 [tool.deptry]
 extend_exclude = ["main.py"]
 
+[tool.black]
+line-length = 120
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
 [tool.commitizen]
 name = "cz_conventional_commits"
 tag_format = "v$version"

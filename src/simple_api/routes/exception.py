@@ -1,13 +1,12 @@
 import os
-from flask import Flask, jsonify
-
-from simple_api.utils import logger, errors
-
 import traceback
 from typing import Tuple
 
+from flask import Flask, Response, jsonify
 from pydantic import ValidationError
 from werkzeug.exceptions import HTTPException
+
+from simple_api.utils import errors, logger
 
 LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO").upper()
 
@@ -23,7 +22,7 @@ def register_error_handlers(app: Flask) -> None:
     """
 
     @app.errorhandler(ValidationError)
-    def handle_validation_error(error: ValidationError) -> Tuple[dict, int]:
+    def handle_validation_error(error: ValidationError) -> Tuple[Response, int]:
         """Handle Pydantic validation errors.
 
         Returns a 400 Bad Request with validation error details.
@@ -52,7 +51,7 @@ def register_error_handlers(app: Flask) -> None:
         )
 
     @app.errorhandler(errors.InvalidUUIDError)
-    def handle_invalid_uuid(error: errors.InvalidUUIDError) -> Tuple[dict, int]:
+    def handle_invalid_uuid(error: errors.InvalidUUIDError) -> Tuple[Response, int]:
         """Handle invalid UUID errors.
 
         Returns a 400 Bad Request when an invalid UUID format is provided.
@@ -62,7 +61,9 @@ def register_error_handlers(app: Flask) -> None:
         return jsonify({"error": str(error)}), 400
 
     @app.errorhandler(errors.PayloadTooLargeError)
-    def handle_payload_too_large(error: errors.PayloadTooLargeError) -> Tuple[dict, int]:
+    def handle_payload_too_large(
+        error: errors.PayloadTooLargeError,
+    ) -> Tuple[Response, int]:
         """Handle payload too large errors.
 
         Returns a 413 Payload Too Large when request exceeds MAX_CONTENT_LENGTH.
@@ -72,7 +73,7 @@ def register_error_handlers(app: Flask) -> None:
         return jsonify({"error": str(error)}), 413
 
     @app.errorhandler(400)
-    def handle_bad_request(error: HTTPException) -> Tuple[dict, int]:
+    def handle_bad_request(error: HTTPException) -> Tuple[Response, int]:
         """Handle 400 Bad Request errors.
 
         Catches general bad request errors from Flask.
@@ -90,7 +91,7 @@ def register_error_handlers(app: Flask) -> None:
         )
 
     @app.errorhandler(404)
-    def handle_not_found(error: HTTPException) -> Tuple[dict, int]:
+    def handle_not_found(error: HTTPException) -> Tuple[Response, int]:
         """Handle 404 Not Found errors.
 
         Returns when a requested resource or endpoint does not exist.
@@ -99,7 +100,7 @@ def register_error_handlers(app: Flask) -> None:
         return jsonify({"error": "Not found"}), 404
 
     @app.errorhandler(405)
-    def handle_method_not_allowed(error: HTTPException) -> Tuple[dict, int]:
+    def handle_method_not_allowed(error: HTTPException) -> Tuple[Response, int]:
         """Handle 405 Method Not Allowed errors.
 
         Returns when an HTTP method is not supported for the endpoint.
@@ -110,14 +111,14 @@ def register_error_handlers(app: Flask) -> None:
             jsonify(
                 {
                     "error": "Method not allowed",
-                    "details": f"The method is not allowed for the requested URL.",
+                    "details": "The method is not allowed for the requested URL.",
                 }
             ),
             405,
         )
 
     @app.errorhandler(413)
-    def handle_request_entity_too_large(error: HTTPException) -> Tuple[dict, int]:
+    def handle_request_entity_too_large(error: HTTPException) -> Tuple[Response, int]:
         """Handle 413 Request Entity Too Large errors.
 
         Returns when request payload exceeds MAX_CONTENT_LENGTH configuration.
@@ -135,7 +136,7 @@ def register_error_handlers(app: Flask) -> None:
         )
 
     @app.errorhandler(415)
-    def handle_unsupported_media_type(error: HTTPException) -> Tuple[dict, int]:
+    def handle_unsupported_media_type(error: HTTPException) -> Tuple[Response, int]:
         """Handle 415 Unsupported Media Type errors.
 
         Returns when Content-Type header is not application/json.
@@ -153,7 +154,7 @@ def register_error_handlers(app: Flask) -> None:
         )
 
     @app.errorhandler(500)
-    def handle_internal_server_error(error: Exception) -> Tuple[dict, int]:
+    def handle_internal_server_error(error: Exception) -> Tuple[Response, int]:
         """Handle 500 Internal Server Error.
 
         Catches server-side errors. Full stack trace is logged but not exposed.
@@ -174,7 +175,7 @@ def register_error_handlers(app: Flask) -> None:
         )
 
     @app.errorhandler(Exception)
-    def handle_unexpected_error(error: Exception) -> Tuple[dict, int]:
+    def handle_unexpected_error(error: Exception) -> Tuple[Response, int]:
         """Handle any unexpected errors.
 
         Catch-all handler for unhandled exceptions. Logs full error and returns generic message.

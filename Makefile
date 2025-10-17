@@ -6,7 +6,7 @@ export SERVER_HOST ?= 0.0.0.0
 export SERVER_PORT ?= 3000
 export LOG_LEVEL ?= INFO
 export AUTO_SAVE ?= true
-ENVIRONMENT ?= development
+export ENVIRONMENT ?= development
 
 .PHONY: setup start run debug test test-cov coverage format lint clean build install uninstall
 
@@ -19,15 +19,7 @@ setup:
 	poetry lock
 	poetry install
 
-run: run-$(ENVIRONMENT)
-
-run-production:
-	poetry run gunicorn --bind $(SERVER_HOST):$(SERVER_PORT) \
-		--workers 1 --log-level=$(LOG_LEVEL) \
-		--access-logfile - --error-logfile - \
-		"simple_api.flask:create_app()"
-
-run-%:  # Catches all non-production environments
+run:
 	poetry run python main.py
 
 debug:

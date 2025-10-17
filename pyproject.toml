@@ -25,6 +25,9 @@ mypy = "^1.18.2"
 debugpy = "^1.8.17"
 commitizen = "^4.9.1"
 pytest-cov = "^7.0.0"
+pre-commit = "^4.3.0"
+safety = "^3.2.11"
+pip-audit = "^2.7.3"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -70,6 +73,13 @@ major_version_zero = true
 version_files = [
     "pyproject.toml:^version",
 ]
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv", "htmlcov"]
+skips = ["B101"]  # Skip assert_used check (common in tests)
+
+[tool.bandit.assert_used]
+skips = ["*/test_*.py"]
 
 [build-system]
 requires = ["poetry-core"]

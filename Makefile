@@ -44,10 +44,16 @@ lint:
 	poetry run isort .
 	poetry run flake8
 	poetry run mypy src
-	poetry run bandit .
 
-imports:
+import:
 	poetry run deptry .
+
+security:
+	poetry run bandit -r src/ -c pyproject.toml -f screen
+	poetry run safety scan
+	poetry run pip-audit --desc --ignore-vuln GHSA-4xh5-x5gv-qwph
+
+check: lint test
 
 commit:
 	git add . && poetry run cz commit && git push

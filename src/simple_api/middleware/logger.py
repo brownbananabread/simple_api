@@ -129,7 +129,7 @@ class RequestResponseLogger:
                     response_data = response.get_json()
                     has_data = True
                 except Exception:
-                    pass
+                    response_data = None
 
             # For non-JSON responses, get a preview of the data
             if not has_data and response.content_length:

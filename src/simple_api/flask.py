@@ -3,7 +3,7 @@ import os
 from flasgger import Swagger  # type: ignore[import-untyped]
 from flask import Flask
 
-from simple_api.utils import logger, metadata, swagger
+from simple_api.utils import logger, metadata, swagger, security
 from simple_api.repository import NoteRepository
 from simple_api.service import NoteService
 from simple_api.routes import exception, health, notes
@@ -27,6 +27,9 @@ def create_app():
         f"Running {metadata.NAME} (v{metadata.VERSION}) on {SERVER_HOST}:{SERVER_PORT}"
     )
     LOG.info(f"Max content length: {MAX_CONTENT_LENGTH} bytes")
+
+    # Security configuration (CORS, headers, rate limiting)
+    security.configure_security(app)
 
     # Swagger configuration
     Swagger(app, config=swagger.CONFIG, template=swagger.TEMPLATE)

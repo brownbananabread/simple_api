@@ -18,8 +18,13 @@ def configure_security(app: Flask) -> None:
         # Force HTTPS (1 year)
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
 
-        # Content Security Policy
-        response.headers["Content-Security-Policy"] = "default-src 'self'"
+        # Content Security Policy - Allow Swagger UI to work
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline'; "
+            "style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data:;"
+        )
 
         # CORS - Allow all origins (adjust as needed)
         response.headers["Access-Control-Allow-Origin"] = "*"

@@ -7,7 +7,7 @@ from simple_api.utils import validators
 def register_handlers(app: Flask, note_service: NoteService) -> None:
     """Register health check endpoints."""
 
-    @app.route("/notes", methods=["POST"])
+    @app.route("/api/v1/notes", methods=["POST"])
     def create_note():
         """Create a new note.
         ---
@@ -82,7 +82,7 @@ def register_handlers(app: Flask, note_service: NoteService) -> None:
         )
         return jsonify(note.to_dict()), 201
 
-    @app.route("/notes", methods=["GET"])
+    @app.route("/api/v1/notes", methods=["GET"])
     def get_all_notes():
         """Get all notes.
         ---
@@ -112,7 +112,7 @@ def register_handlers(app: Flask, note_service: NoteService) -> None:
         notes = note_service.get_all_notes()
         return jsonify([note.to_dict() for note in notes]), 200
     
-    @app.route("/notes/<note_id>", methods=["GET"])
+    @app.route("/api/v1/notes/<note_id>", methods=["GET"])
     def get_note(note_id: str):
         """Get a specific note.
         ---
@@ -168,7 +168,7 @@ def register_handlers(app: Flask, note_service: NoteService) -> None:
             return jsonify({"error": "Note not found"}), 404
         return jsonify(note.to_dict()), 200
 
-    @app.route("/notes/<note_id>", methods=["PUT"])
+    @app.route("/api/v1/notes/<note_id>", methods=["PUT"])
     def update_note(note_id: str):
         """Update a note.
         ---
@@ -261,7 +261,7 @@ def register_handlers(app: Flask, note_service: NoteService) -> None:
 
         return jsonify(note.to_dict()), 200
 
-    @app.route("/notes/<note_id>", methods=["DELETE"])
+    @app.route("/api/v1/notes/<note_id>", methods=["DELETE"])
     def delete_note(note_id: str):
         """Delete a note.
         ---

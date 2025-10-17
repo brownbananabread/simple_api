@@ -55,7 +55,4 @@ imports:
 check: lint test imports
 
 commit:
-	git add . && poetry run cz commit
-
-bump:
-	poetry run cz bump --changelog
+	git add . && poetry run cz commit && git push

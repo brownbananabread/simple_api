@@ -54,7 +54,7 @@ class TestRequestValidation:
         payload = {"title": "", "content": "Test content"}
 
         response = client.post(
-            "/notes", data=json.dumps(payload), content_type="application/json"
+            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
         )
 
         assert response.status_code == 400
@@ -67,7 +67,7 @@ class TestRequestValidation:
         payload = {"title": "   ", "content": "Test content"}
 
         response = client.post(
-            "/notes", data=json.dumps(payload), content_type="application/json"
+            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
         )
 
         assert response.status_code == 400
@@ -79,7 +79,7 @@ class TestRequestValidation:
         payload = {"title": "Test Title", "content": ""}
 
         response = client.post(
-            "/notes", data=json.dumps(payload), content_type="application/json"
+            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
         )
 
         assert response.status_code == 400
@@ -91,7 +91,7 @@ class TestRequestValidation:
         payload = {"title": "Test Title", "content": "   "}
 
         response = client.post(
-            "/notes", data=json.dumps(payload), content_type="application/json"
+            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
         )
 
         assert response.status_code == 400
@@ -103,7 +103,7 @@ class TestRequestValidation:
         payload = {"title": "a" * 201, "content": "Test content"}
 
         response = client.post(
-            "/notes", data=json.dumps(payload), content_type="application/json"
+            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
         )
 
         assert response.status_code == 400
@@ -115,7 +115,7 @@ class TestRequestValidation:
         payload = {"title": "Test Title", "content": "a" * 10001}
 
         response = client.post(
-            "/notes", data=json.dumps(payload), content_type="application/json"
+            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
         )
 
         assert response.status_code == 400
@@ -127,7 +127,7 @@ class TestRequestValidation:
         payload = {"title": "  Test Title  ", "content": "  Test content  "}
 
         response = client.post(
-            "/notes", data=json.dumps(payload), content_type="application/json"
+            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
         )
 
         assert response.status_code == 201
@@ -139,7 +139,7 @@ class TestRequestValidation:
         """Test that updating with empty title is rejected."""
         # Create a note first
         create_response = client.post(
-            "/notes",
+            "/api/v1/notes",
             data=json.dumps({"title": "Original", "content": "Original content"}),
             content_type="application/json",
         )
@@ -147,7 +147,7 @@ class TestRequestValidation:
 
         # Try to update with empty title
         response = client.put(
-            f"/notes/{note_id}",
+            f"/api/v1/notes/{note_id}",
             data=json.dumps({"title": ""}),
             content_type="application/json",
         )
@@ -159,7 +159,7 @@ class TestRequestValidation:
     def test_update_note_with_invalid_uuid(self, client):
         """Test that updating with invalid UUID is rejected."""
         response = client.put(
-            "/notes/invalid-uuid",
+            "/api/v1/notes/invalid-uuid",
             data=json.dumps({"title": "Updated"}),
             content_type="application/json",
         )
@@ -170,7 +170,7 @@ class TestRequestValidation:
 
     def test_get_note_with_invalid_uuid(self, client):
         """Test that getting with invalid UUID is rejected."""
-        response = client.get("/notes/invalid-uuid")
+        response = client.get("/api/v1/notes/invalid-uuid")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -178,7 +178,7 @@ class TestRequestValidation:
 
     def test_delete_note_with_invalid_uuid(self, client):
         """Test that deleting with invalid UUID is rejected."""
-        response = client.delete("/notes/invalid-uuid")
+        response = client.delete("/api/v1/notes/invalid-uuid")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -206,7 +206,7 @@ class TestErrorHandlers:
 
     def test_empty_request_body(self, client):
         """Test error when request body is empty."""
-        response = client.post("/notes", content_type="application/json")
+        response = client.post("/api/v1/notes", content_type="application/json")
 
         assert response.status_code == 400
         data = response.get_json()
@@ -223,7 +223,7 @@ class TestMaxContentLength:
         payload = {"title": "Test", "content": large_content}
 
         response = client.post(
-            "/notes", data=json.dumps(payload), content_type="application/json"
+            "/api/v1/notes", data=json.dumps(payload), content_type="application/json"
         )
 
         # Flask returns 413 for payload too large

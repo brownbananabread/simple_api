@@ -34,7 +34,7 @@ test-cov:
 lint:
 	poetry run black .
 	poetry run isort .
-	poetry run flake8
+	poetry run flake8 src tests
 	poetry run mypy src
 
 import:

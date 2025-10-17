@@ -6,7 +6,8 @@ from flask import Flask, Response, jsonify
 from pydantic import ValidationError
 from werkzeug.exceptions import HTTPException
 
-from simple_api.utils import errors, logger
+from simple_api.middleware import logger
+from simple_api.utils import errors
 
 LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO").upper()
 

@@ -260,3 +260,33 @@ To run the debugger in VSCode, you must create `.vscode/launch.json`:
     ]
 }
 ```
+
+## Future Enhancements
+
+### Critical Priority
+- Dockerfile & container support
+- Rate limiting middleware
+- Request ID tracking for distributed tracing
+- Configuration validation with Pydantic
+- Kubernetes-ready health checks (/readiness, /liveness)
+
+### High Priority
+- Prometheus metrics endpoint
+- Structured JSON logging
+- Secret management integration
+- Graceful shutdown handling
+- Restricted CORS configuration
+
+### Medium Priority
+- CI/CD security scanning
+- Advanced input sanitization
+- Response compression
+- Request timeout middleware
+- API contract testing
+
+### Nice-to-Have
+- Load testing suite
+- Deployment smoke tests
+- Multi-environment configs
+- API versioning strategy
+- Database integration

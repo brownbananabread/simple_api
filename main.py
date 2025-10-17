@@ -1,14 +1,18 @@
 import os
 
 from simple_api import flask
+from simple_api.middleware import logger
+from simple_api.utils import metadata
 
+LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO").upper()
 SERVER_HOST = os.environ.get("SERVER_HOST", "0.0.0.0")
 SERVER_PORT = int(os.environ.get("SERVER_PORT", "3000"))
 AUTO_SAVE = os.environ.get("AUTO_SAVE", "false").lower() == "true"
-ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "development").lower()
 
-# Create app instance for gunicorn
 app = flask.create_app()
+
+LOG = logger.setup(level=LOG_LEVEL)
 
 if __name__ == "__main__":
     if ENVIRONMENT == "production":
@@ -38,10 +42,16 @@ if __name__ == "__main__":
             "errorlog": "-",
             "timeout": int(os.environ.get("WORKER_TIMEOUT", "30")),
         }
-
-        print(f"Starting production server on {SERVER_HOST}:{SERVER_PORT} with {options['workers']} workers")
+        LOG.info(
+            f"Starting {metadata.NAME} v{metadata.VERSION}(production server): "
+            f"host={SERVER_HOST}:{SERVER_PORT}, workers={options['workers']}, "
+            f"log_level={LOG_LEVEL}"
+        )
         StandaloneApplication(app, options).run()
     else:
         # Development mode: use Flask's built-in server
-        print(f"Starting development server on {SERVER_HOST}:{SERVER_PORT}")
-        app.run(host=SERVER_HOST, port=SERVER_PORT, debug=AUTO_SAVE)
+        LOG.info(
+            f"Starting {metadata.NAME} v{metadata.VERSION}(development server): "
+            f"host={SERVER_HOST}:{SERVER_PORT}, log_level={LOG_LEVEL}"
+        )
+        app.run(host=SERVER_HOST, port=SERVER_PORT, debug=True)

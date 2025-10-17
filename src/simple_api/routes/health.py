@@ -2,7 +2,8 @@ import os
 
 from flask import Flask, jsonify
 
-from simple_api.utils import logger, metadata
+from simple_api.middleware import logger
+from simple_api.utils import metadata
 
 LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO").upper()
 
